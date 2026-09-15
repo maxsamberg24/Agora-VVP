@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agora — Visual Value Propositions</title>
+<meta name="description" content="Vote on product ideas.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/agora-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-view="intro">
+
+<div class="setup-bar" id="setupBar" hidden>
+  <span class="dot" aria-hidden="true"></span>
+  <span>Not connected to a Google Sheet yet. Answers stay in this browser only. Add your endpoint in <code>config.js</code>.</span>
+</div>
+
+<header class="masthead">
+  <img class="lockup" src="assets/agora-lockup.png" alt="Agora">
+  <div class="progress" id="progress" hidden>
+    <span class="kicker" id="progressLabel">01 / 01</span>
+    <div class="rail" id="rail" aria-hidden="true"></div>
+  </div>
+</header>
+
+<!-- ══════════ 1 · HOW IT WORKS ══════════ -->
+<section class="intro" id="introView">
+  <div class="intro-type">
+    <p class="kicker coral">Before you start</p>
+    <h1 class="statement">
+      <span class="shout">How it</span>
+      <span class="serif coral">works.</span>
+    </h1>
+    <div class="intro-window" aria-hidden="true">
+      <span class="mini mini-3"></span>
+      <span class="mini mini-2"></span>
+      <span class="mini mini-1"></span>
+      <span class="hand intro-note">Be honest.</span>
+    </div>
+  </div>
+
+  <div class="intro-body">
+    <ul class="how">
+      <li>Once you hit enter, you will be shown Visual Value Propositions for multiple product ideas.</li>
+      <li>Some of them are programs, some are tools, some are apps, &amp; some are even physical spaces. There are simple ideas, complicated ideas, &amp; outlandish ideas. It is your job to vote on which ones are bad, which could potentially work, &amp; which ones you would actually want to use.</li>
+      <li>Honest feedback highly encouraged. Without it I can’t make progress. I promise you won’t hurt my feelings.</li>
+      <li>Thanks for helping out. If you have any comments or ideas after, please feel free to reach out.</li>
+    </ul>
+
+    <div class="start">
+      <label class="field">
+        <span class="kicker">Your name <span class="opt">optional</span></span>
+        <input id="nameInput" type="text" autocomplete="given-name" spellcheck="false" maxlength="80" enterkeyhint="go" placeholder="First name is fine">
+      </label>
+      <button class="pill pill-peach pill-lg" id="startBtn" type="button">
+        <span id="startLabel">Start voting</span>
+        <kbd class="key">Enter ↵</kbd>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2 · VOTING ══════════ -->
+<main class="vote" id="voteView" hidden>
+  <div class="stage" id="stage">
+    <div class="sky" aria-hidden="true"></div>
+
+    <div class="deck-area" id="deckArea">
+      <div class="deck" id="deck" role="group" aria-label="Idea cards"></div>
+    </div>
+
+    <section class="panel" id="panel" aria-label="Your vote">
+      <p class="hand panel-hand">Gut reaction.</p>
+
+      <div class="panel-bar">
+        <div class="dots" id="dots">
+          <button class="dot" type="button" aria-label="Question 1"><i></i>01</button>
+          <button class="dot" type="button" aria-label="Question 2"><i></i>02</button>
+          <button class="dot" type="button" aria-label="Question 3"><i></i>03</button>
+        </div>
+        <button class="link-btn" id="backBtn" type="button">← Back</button>
+      </div>
+
+      <div class="step" data-step="1">
+        <div class="choices" id="reactions" role="radiogroup" aria-label="Gut reaction"></div>
+      </div>
+
+      <div class="step" data-step="2">
+        <p class="said" id="said"></p>
+        <h2 class="prompt" id="reasonPrompt"></h2>
+        <div class="choices compact" id="reasons" role="radiogroup" aria-labelledby="reasonPrompt"></div>
+      </div>
+
+      <div class="step" data-step="3">
+        <h2 class="prompt"><span id="notePrompt"></span> <span class="opt">optional</span></h2>
+        <textarea class="note" id="noteInput" rows="4" enterkeyhint="next" aria-labelledby="notePrompt"></textarea>
+        <div class="note-foot">
+          <span class="hint-desktop"><kbd class="key">Enter ↵</kbd> to move on · Shift + Enter for a new line</span>
+          <span class="hint-touch">Return ↵ moves on</span>
+          <button class="link-btn" id="skipBtn" type="button">Skip →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="finale" id="finishView" hidden>
+      <div class="finale-inner">
+        <p class="kicker coral" id="finishKicker">All ideas</p>
+        <h2 class="statement">
+          <span class="shout">That’s all</span>
+          <span class="serif">of them.</span>
+        </h2>
+        <p class="finale-copy">Submit to send your votes in, or flip through again to change anything first.</p>
+        <div class="finale-actions">
+          <button class="pill pill-peach pill-lg" id="submitBtn" type="button">Submit <span class="arw" aria-hidden="true">→</span></button>
+          <button class="pill pill-ghost pill-lg" id="againBtn" type="button">Flip through again</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="finale" id="thanksView" hidden>
+      <div class="finale-inner">
+        <h2 class="statement">
+          <span class="shout">Thank you</span>
+          <span class="serif coral">for helping out.</span>
+        </h2>
+        <p class="finale-copy">If you have any comments or ideas, please feel free to reach out.</p>
+        <p class="send-status" id="sendStatus" aria-live="polite"></p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ══════════ FULL-SIZE READER ══════════ -->
+<div class="reader" id="reader" hidden role="dialog" aria-modal="true" aria-label="Full-size view">
+  <button class="close-btn" id="readerClose" type="button" aria-label="Back to voting">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="reader-inner" id="readerInner"></div>
+  <p class="reader-hint">Esc, or tap outside the image, to get back to voting</p>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
