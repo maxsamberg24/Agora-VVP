@@ -10,7 +10,7 @@ window.AGORA = {
      (it ends in /exec). While this is empty, the site shows a dark
      bar across the top and answers stay in that browser only.
      README.md → "2. Collect responses" walks through it.       */
-  endpoint: 'https://script.google.com/macros/s/AKfycbyMxJS4psj_NVlOYoM9lYDUH7MM9U99y9rcdccn3hmr1dZNqT8aesHm4D-dEyMJpdWI/exec',
+  endpoint: 'https://script.google.com/macros/s/AKfycbzpyClIubSyy_KhKFVnn33Mcqc3i2j5AtZYpyVpGv5Ks5sFVThVI2Z0fLyP1SFSL6JA/exec',
 
   /* Stamped on every row, so separate rounds stay separable.   */
   round: 'Round 01',
