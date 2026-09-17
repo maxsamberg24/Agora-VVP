@@ -4,15 +4,16 @@ A voting site for Visual Value Propositions. Each participant reads how it works
 
 ## The flow
 
-1. **How it works.** Your four bullets, an optional name, then Enter to start.
-2. **Each idea.** The card sits in the middle of the rolodex; the questions sit on the left under *Gut reaction.*
+1. **How it works.** The bullets, then age, gender and city. The button stays dim until all three are filled, then Enter starts it.
+2. **Each idea.** The card sits in the middle of the rolodex; the two questions sit on the left under *Gut reaction.*
    - **Q1 · Gut reaction:** Not for me · Sounds interesting, would want to learn more · Would use this ASAP
-   - **Q2 · What's driving that?** one tap
-   - **Q3 · In your words:** optional. Enter moves on.
+   - **Q2 · What made you choose that answer?** Four options, pick any number of them or skip. The wording changes to match the Q1 answer, so "Sounds fun" becomes "Doesn't sound fun" for a no.
 
-   Picking an answer moves straight to the next question, and finishing Q3 flips to the next idea. There are no save or submit buttons along the way. Tap or click the card to read the whole image full size.
-3. **The end.** *Submit*, or *Flip through again* to change anything first.
+   Answering Q1 moves straight to Q2, and Enter (or *Skip*) moves to the next idea. There are no save buttons. **Once an idea is done it can't be reopened**, and the intro says so. Tap or click a card to read the whole image full size.
+3. **The end.** One optional written question, a *View again* button for looking back through the deck without voting, then *Submit*.
 4. **Thank you.**
+
+The four Q2 options mean the same four things in every set, and the sheet records a stable key for each (`problem`, `fun`, `easier`, `social`) next to the wording, so they can be compared across answers.
 
 ## What's in the folder
 
@@ -85,14 +86,14 @@ Upload the whole folder, including `vvps/`. Anyone with the link can see the ima
 | `vvp_num` | The idea's private number |
 | `vvp_label` | Your label from `config.js`, if you set one |
 | `reaction` · `reaction_score` | Q1, as words and as 1 / 2 / 3 |
-| `reason` | Q2 |
-| `note` | Q3, their own words |
+| `reasons` | Q2, the wording they picked, separated by `;` (empty if they skipped) |
+| `reason_keys` | The same picks as `problem` / `fun` / `easier` / `social`, for comparing across answers |
 | `position` | Where this idea fell in *their* order (1 = first card they saw) |
 | `seconds_to_react` | Time from first seeing the card to answering Q1 |
-| `name` · `session_id` | Who. `session_id` is unique per person, even with no name |
+| `session_id` | Who. Unique per person; their age, gender and city are on the Sessions tab |
 | `updated_at` · `received_at` | When they answered, and when the sheet got it |
 
-**Sessions tab.** One row per person: name, when they started, whether they pressed **Submit** (`submitted`), how many ideas they finished, and `order`, the exact sequence of idea numbers they were shown.
+**Sessions tab.** One row per person: `age`, `gender`, `city`, when they started, whether they pressed **Submit** (`submitted`), how many ideas they finished, their `closing_note` from the end of the run, and `order`, the exact sequence of idea numbers they were shown.
 
 `position` and `order` let you check for order effects, such as ideas scoring lower simply because they came late.
 
@@ -101,8 +102,9 @@ Upload the whole folder, including `vvps/`. Anyone with the link can see the ima
 - **Answers send as they're given.** Someone who closes the tab halfway still counts; their *Sessions* row just shows `submitted` as FALSE.
 - **A changed answer overwrites, it doesn't duplicate.** If someone flips through again and changes a vote, their row updates to the final answer.
 - **Flaky connections are fine.** Unsent answers wait in that person's browser and go through once they're back online, including the next time they open the link.
-- **To change the questions**, edit sections 3 to 5 of `config.js`. The sheet stores the answer text, so rename options between rounds rather than mid-round.
-- **Keyboard:** number keys answer, Enter moves on, ← goes back, Esc closes the full-size view.
+- **To change the questions**, edit sections 3 to 6 of `config.js`. Each Q1 answer carries its own list of Q2 options, so edit them inside the matching `reactions` entry. The sheet stores the answer text, so rename options between rounds rather than mid-round.
+- **If you change the columns in `google-apps-script.gs`**, paste the new script in, run `setup` once (it repairs the header rows and rebuilds Summary), then **Deploy → Manage deployments → pencil → New version**. Clear out old rows first, since they were written under the old headers.
+- **Keyboard:** number keys answer (and toggle Q2 picks), Enter moves on, ← goes back from Q2 to Q1, Esc closes the full-size view.
 - **The collector URL lives in the site's code**, so a determined visitor could find it and post junk to your sheet. That's fine for a feedback round; just don't reuse the setup for anything sensitive.
 
 ## Tuning the rolodex

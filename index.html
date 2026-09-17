@@ -47,16 +47,28 @@
     <ul class="how">
       <li>Once you hit enter, you will be shown Visual Value Propositions for multiple product ideas.</li>
       <li>Some of them are programs, some are tools, some are apps, &amp; some are even physical spaces. There are simple ideas, complicated ideas, &amp; outlandish ideas. It is your job to vote on which ones are bad, which could potentially work, &amp; which ones you would actually want to use.</li>
+      <li>Two quick questions per idea. Once you move on from an idea you can’t go back to it, so go with your gut.</li>
       <li>Honest feedback highly encouraged. Without it I can’t make progress. I promise you won’t hurt my feelings.</li>
       <li>Thanks for helping out. If you have any comments or ideas after, please feel free to reach out.</li>
     </ul>
 
     <div class="start">
-      <label class="field">
-        <span class="kicker">Your name <span class="opt">optional</span></span>
-        <input id="nameInput" type="text" autocomplete="given-name" spellcheck="false" maxlength="80" enterkeyhint="go" placeholder="First name is fine">
-      </label>
-      <button class="pill pill-peach pill-lg" id="startBtn" type="button">
+      <div class="fields" id="fields">
+        <label class="field">
+          <span class="kicker">Age</span>
+          <input id="ageInput" type="number" inputmode="numeric" autocomplete="off" placeholder="24">
+        </label>
+        <label class="field">
+          <span class="kicker">Gender</span>
+          <select id="genderInput"></select>
+        </label>
+        <label class="field field-wide">
+          <span class="kicker">City</span>
+          <input id="cityInput" type="text" autocomplete="address-level2" spellcheck="false" maxlength="60" enterkeyhint="go" placeholder="Los Angeles">
+        </label>
+      </div>
+
+      <button class="pill pill-peach pill-lg is-waiting" id="startBtn" type="button" aria-disabled="true">
         <span id="startLabel">Start voting</span>
         <kbd class="key">Enter ↵</kbd>
       </button>
@@ -80,7 +92,6 @@
         <div class="dots" id="dots">
           <button class="dot" type="button" aria-label="Question 1"><i></i>01</button>
           <button class="dot" type="button" aria-label="Question 2"><i></i>02</button>
-          <button class="dot" type="button" aria-label="Question 3"><i></i>03</button>
         </div>
         <button class="link-btn" id="backBtn" type="button">← Back</button>
       </div>
@@ -92,31 +103,44 @@
       <div class="step" data-step="2">
         <p class="said" id="said"></p>
         <h2 class="prompt" id="reasonPrompt"></h2>
-        <div class="choices compact" id="reasons" role="radiogroup" aria-labelledby="reasonPrompt"></div>
-      </div>
-
-      <div class="step" data-step="3">
-        <h2 class="prompt"><span id="notePrompt"></span> <span class="opt">optional</span></h2>
-        <textarea class="note" id="noteInput" rows="4" enterkeyhint="next" aria-labelledby="notePrompt"></textarea>
-        <div class="note-foot">
-          <span class="hint-desktop"><kbd class="key">Enter ↵</kbd> to move on · Shift + Enter for a new line</span>
-          <span class="hint-touch">Return ↵ moves on</span>
-          <button class="link-btn" id="skipBtn" type="button">Skip →</button>
+        <p class="sub-hint" id="reasonHint"></p>
+        <div class="choices compact" id="reasons" role="group" aria-labelledby="reasonPrompt"></div>
+        <div class="step-foot">
+          <span class="hint-desktop"><kbd class="key">Enter ↵</kbd> to move on</span>
+          <span class="hint-touch">Pick any, or skip</span>
+          <button class="link-btn" id="reasonNext" type="button">Skip →</button>
         </div>
       </div>
     </section>
 
+    <!-- looking back through the deck after voting, no voting allowed -->
+    <div class="review-bar" id="reviewBar" hidden>
+      <button class="round-btn" id="revPrev" type="button" aria-label="Previous idea">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>
+      </button>
+      <span class="kicker" id="revCount">01 / 01</span>
+      <button class="round-btn" id="revNext" type="button" aria-label="Next idea">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <button class="pill pill-peach" id="revDone" type="button">Done looking <span class="arw" aria-hidden="true">→</span></button>
+    </div>
+
     <section class="finale" id="finishView" hidden>
       <div class="finale-inner">
+        <div class="finale-top">
+          <button class="pill pill-ghost" id="viewAgainBtn" type="button">View again</button>
+        </div>
         <p class="kicker coral" id="finishKicker">All ideas</p>
         <h2 class="statement">
           <span class="shout">That’s all</span>
           <span class="serif">of them.</span>
         </h2>
-        <p class="finale-copy">Submit to send your votes in, or flip through again to change anything first.</p>
+        <label class="closing">
+          <span class="closing-prompt" id="closingPrompt"></span>
+          <textarea class="note closing-note" id="closingNote" rows="5"></textarea>
+        </label>
         <div class="finale-actions">
           <button class="pill pill-peach pill-lg" id="submitBtn" type="button">Submit <span class="arw" aria-hidden="true">→</span></button>
-          <button class="pill pill-ghost pill-lg" id="againBtn" type="button">Flip through again</button>
         </div>
       </div>
     </section>
@@ -140,7 +164,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
   <div class="reader-inner" id="readerInner"></div>
-  <p class="reader-hint">Esc, or tap outside the image, to get back to voting</p>
+  <p class="reader-hint">Esc, or tap outside the image, to go back</p>
 </div>
 
 <script src="config.js"></script>

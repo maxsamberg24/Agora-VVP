@@ -6,7 +6,8 @@
  * Receives answers from the VVP site and writes them into this
  * spreadsheet:
  *   Responses  one row per person per idea (a changed vote updates its row)
- *   Sessions   one row per person: name, random order shown, submitted or not
+ *   Sessions   one row per person: age, gender, city, the random order they
+ *              saw, their closing note, and whether they pressed Submit
  *   Summary    live roll-up by idea
  *
  * SETUP (about 5 minutes; full walkthrough in README.md)
@@ -27,18 +28,19 @@ var SESSIONS  = 'Sessions';
 var SUMMARY   = 'Summary';
 
 var RESPONSE_COLUMNS = [
-  'key', 'received_at', 'updated_at', 'round', 'session_id', 'name',
+  'key', 'received_at', 'updated_at', 'round', 'session_id',
   'vvp_num', 'vvp_label', 'position', 'reaction', 'reaction_score',
-  'reason', 'note', 'seconds_to_react'
+  'reasons', 'reason_keys', 'seconds_to_react'
 ];
 
 var SESSION_COLUMNS = [
-  'session_id', 'received_at', 'updated_at', 'round', 'name', 'started_at',
+  'session_id', 'received_at', 'updated_at', 'round',
+  'age', 'gender', 'city', 'started_at',
   'submitted', 'submitted_at', 'cards_answered', 'cards_total',
-  'order', 'device', 'screen', 'user_agent'
+  'closing_note', 'order', 'device', 'screen', 'user_agent'
 ];
 
-var NUMERIC_COLUMNS = ['vvp_num', 'position', 'reaction_score', 'seconds_to_react', 'cards_answered', 'cards_total'];
+var NUMERIC_COLUMNS = ['vvp_num', 'position', 'reaction_score', 'seconds_to_react', 'age', 'cards_answered', 'cards_total'];
 var MAX_EVENTS = 100;
 var MAX_TEXT = 5000;
 
@@ -87,9 +89,15 @@ function doGet() {
   return ContentService.createTextOutput('Agora VVP collector is live. Paste this URL into config.js → endpoint.');
 }
 
-/** Run once from the editor: creates the tabs and prompts for access. */
+/** Run once from the editor: creates the tabs and prompts for access.
+ *  Safe to run again after the columns change: it repairs the header rows
+ *  and rebuilds the Summary formulas. */
 function setup() {
-  ensureSheets_(SpreadsheetApp.getActiveSpreadsheet());
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSheets_(ss);
+  var summary = ss.getSheetByName(SUMMARY);
+  if (summary) ss.deleteSheet(summary);
+  makeSummary_(ss);
 }
 
 /** Optional: run from the editor to drop in a fake answer and watch the rows appear. */
@@ -97,11 +105,13 @@ function testPost() {
   var id = 'editor-test-' + new Date().getTime();
   var now = new Date().toISOString();
   var out = doPost({ postData: { contents: JSON.stringify({ events: [
-    { type: 'session', session_id: id, round: 'Test', name: 'Editor test', started_at: now, updated_at: now,
-      submitted: false, submitted_at: '', cards_answered: 1, cards_total: 1, order: '1', device: 'editor' },
-    { type: 'response', session_id: id, round: 'Test', name: 'Editor test', vvp_num: 1, vvp_label: '', position: 1,
-      reaction: 'Would use this ASAP', reaction_score: 3, reason: 'The problem it solves',
-      note: 'Test row from the Apps Script editor. Safe to delete.', seconds_to_react: 4.2, updated_at: now }
+    { type: 'session', session_id: id, round: 'Test', age: 30, gender: 'Other', city: 'Editor', started_at: now,
+      updated_at: now, submitted: false, submitted_at: '', cards_answered: 1, cards_total: 1,
+      closing_note: 'Test row from the Apps Script editor. Safe to delete.', order: '1', device: 'editor' },
+    { type: 'response', session_id: id, round: 'Test', vvp_num: 1, vvp_label: '', position: 1,
+      reaction: 'Would use this ASAP', reaction_score: 3,
+      reasons: 'Solves a problem I have; Sounds fun', reason_keys: 'problem; fun',
+      seconds_to_react: 4.2, updated_at: now }
   ] }) } });
   Logger.log(out.getContent());
 }
@@ -169,9 +179,27 @@ function ensureRows_(sheet, row) {
 /* ── sheet setup ──────────────────────────────────────────── */
 
 function ensureSheets_(ss) {
-  makeTab_(ss, RESPONSES, RESPONSE_COLUMNS);
-  makeTab_(ss, SESSIONS, SESSION_COLUMNS);
+  syncHeaders_(makeTab_(ss, RESPONSES, RESPONSE_COLUMNS), RESPONSE_COLUMNS);
+  syncHeaders_(makeTab_(ss, SESSIONS, SESSION_COLUMNS), SESSION_COLUMNS);
   if (!ss.getSheetByName(SUMMARY)) makeSummary_(ss);
+}
+
+/** If the columns in this script changed, bring the sheet's header row along. */
+function syncHeaders_(sheet, columns) {
+  var width = Math.max(sheet.getLastColumn(), columns.length);
+  var current = sheet.getRange(1, 1, 1, width).getValues()[0];
+  var same = true;
+  for (var i = 0; i < columns.length; i++) {
+    if (String(current[i]) !== columns[i]) { same = false; break; }
+  }
+  if (same) return sheet;
+  if (sheet.getMaxColumns() < columns.length) sheet.insertColumnsAfter(sheet.getMaxColumns(), columns.length - sheet.getMaxColumns());
+  sheet.getRange(1, 1, 1, columns.length).setValues([columns]).setFontWeight('bold');
+  // an older layout may have been wider: clear any header left over to the right
+  var extra = sheet.getLastColumn() - columns.length;
+  if (extra > 0) sheet.getRange(1, columns.length + 1, 1, extra).clearContent();
+  applyFormats_(sheet, columns);
+  return sheet;
 }
 
 function makeTab_(ss, name, columns) {
@@ -181,7 +209,11 @@ function makeTab_(ss, name, columns) {
   sheet = ss.insertSheet(name);
   sheet.getRange(1, 1, 1, columns.length).setValues([columns]).setFontWeight('bold');
   sheet.setFrozenRows(1);
+  applyFormats_(sheet, columns);
+  return sheet;
+}
 
+function applyFormats_(sheet, columns) {
   var rows = sheet.getMaxRows();
   columns.forEach(function (c, i) {
     var col = sheet.getRange(1, i + 1, rows, 1);
@@ -189,7 +221,6 @@ function makeTab_(ss, name, columns) {
     // keep text as typed: stops Sheets turning notes, ids and timestamps into dates or numbers
     else if (NUMERIC_COLUMNS.indexOf(c) === -1 && c !== 'submitted') col.setNumberFormat('@');
   });
-  return sheet;
 }
 
 function makeSummary_(ss) {

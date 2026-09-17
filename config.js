@@ -6,10 +6,9 @@
 window.AGORA = {
 
   /* ── 1. Where responses go ────────────────────────────────
-     Paste the Web app URL from your Google Apps Script deployment
-     (it ends in /exec). While this is empty, the site shows a dark
-     bar across the top and answers stay in that browser only.
-     README.md → "2. Collect responses" walks through it.       */
+     The Web app URL from your Google Apps Script deployment.
+     While this is empty, the site shows a dark bar across the top
+     and answers stay in that browser only.                     */
   endpoint: 'https://script.google.com/macros/s/AKfycbzpyClIubSyy_KhKFVnn33Mcqc3i2j5AtZYpyVpGv5Ks5sFVThVI2Z0fLyP1SFSL6JA/exec',
 
   /* Stamped on every row, so separate rounds stay separable.   */
@@ -19,13 +18,11 @@ window.AGORA = {
      `num` is your private reference number. Participants never
      see it, and every row in the sheet carries it. Everyone gets
      their own random order, so the order of this list is irrelevant.
-
-     `label` is optional and private: a short note to yourself that
-     lands next to the number in the sheet (e.g. 'Social venue').
+     `label` is optional and private: a note to yourself that lands
+     next to the number in the sheet.
 
      Images load from the pattern below with {num} swapped in.
-     prepare-images.sh fills vvps/ from a draft set folder.
-     A missing image shows a blank template instead.            */
+     prepare-images.sh fills vvps/ from a draft set folder.      */
   images: 'vvps/vvp-{num}.jpg',
 
   vvps: [
@@ -41,25 +38,52 @@ window.AGORA = {
     { num: 28, label: '' }, { num: 29, label: '' }, { num: 30, label: '' }
   ],
 
-  /* ── 3. Question 1: gut reaction, shown top to bottom ─────
-     `score` is what lands in the sheet, so ideas can be averaged. */
+  /* ── 3. Who's answering ───────────────────────────────────
+     All three are required before the button lights up. Edit the
+     gender choices here; an empty first option keeps it unanswered. */
+  genders: ['Man', 'Woman', 'Non-binary', 'Other'],
+  ageRange: { min: 10, max: 110 },
+
+  /* ── 4. Question 1: gut reaction, shown top to bottom ─────
+     `score` is what lands in the sheet, so ideas can be averaged.
+     Each answer carries its own follow-up wording. The four `key`
+     values line up across all three sets (problem / fun / easier /
+     social), so you can compare them in one column of the sheet.  */
   reactions: [
-    { key: 'not_for_me',  label: 'Not for me',                                   score: 1, color: '#161616' },
-    { key: 'interesting', label: 'Sounds interesting, would want to learn more', score: 2, color: '#ADF1FF' },
-    { key: 'asap',        label: 'Would use this ASAP',                          score: 3, color: '#F67451' }
+    {
+      key: 'not_for_me', label: 'Not for me', score: 1, color: '#161616',
+      reasons: [
+        { key: 'problem', label: "Doesn't solve a problem I have" },
+        { key: 'fun',     label: "Doesn't sound fun" },
+        { key: 'easier',  label: 'Would not make my life any easier' },
+        { key: 'social',  label: 'Would not improve my social life' }
+      ]
+    },
+    {
+      key: 'interesting', label: 'Sounds interesting, would want to learn more', score: 2, color: '#ADF1FF',
+      reasons: [
+        { key: 'problem', label: 'Might solve a problem I have' },
+        { key: 'fun',     label: 'Sounds kinda fun' },
+        { key: 'easier',  label: 'Could potentially make my life easier' },
+        { key: 'social',  label: 'Could maybe improve my social life' }
+      ]
+    },
+    {
+      key: 'asap', label: 'Would use this ASAP', score: 3, color: '#F67451',
+      reasons: [
+        { key: 'problem', label: 'Solves a problem I have' },
+        { key: 'fun',     label: 'Sounds fun' },
+        { key: 'easier',  label: 'Would make my life easier' },
+        { key: 'social',  label: 'Would improve my social life' }
+      ]
+    }
   ],
 
-  /* ── 4. Question 2: one tap, then it moves on ─────────────── */
-  reasonPrompt: 'What’s driving that?',
-  reasons: [
-    { key: 'problem', label: 'The problem it solves' },
-    { key: 'how',     label: 'How it would work' },
-    { key: 'who',     label: 'Who it’s for' },
-    { key: 'effort',  label: 'The cost, time or effort' },
-    { key: 'unclear', label: 'Hard to tell from the image' }
-  ],
+  /* ── 5. Question 2 wording ────────────────────────────────  */
+  reasonPrompt: 'What made you choose that answer?',
+  reasonHint: 'Pick as many as you like.',
 
-  /* ── 5. Question 3: optional, in their own words ──────────── */
-  notePrompt: 'In your words',
-  notePlaceholder: 'What’s working? What isn’t? What would you change?'
+  /* ── 6. The one written question, at the very end ─────────  */
+  closingPrompt: 'Let me know if you have any ideas, thoughts, or suggestions about any of these concepts!',
+  closingPlaceholder: 'Anything at all. What stood out, what missed, what you would build instead.'
 };
