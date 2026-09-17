@@ -199,7 +199,7 @@ button { font-family: inherit; }
   border-radius: 22px;
   padding: 10px 10px 42px;
   transform-origin: 50% 50%; will-change: transform, opacity;
-  transition: transform .74s var(--ease), opacity .5s ease;
+  transition: transform .74s var(--ease), opacity .5s ease, background-color .4s ease;
   backface-visibility: hidden; user-select: none; -webkit-user-select: none;
 }
 .card.is-active { cursor: zoom-in; }
@@ -210,8 +210,11 @@ button { font-family: inherit; }
   position: relative; height: 100%; overflow: hidden; background: #fff;
   border-radius: 14px;
 }
-/* a waiting card shows nothing at all: the idea fades in as it reaches the front */
+/* a waiting card is a blank grey slab, the same grey as the page behind it.
+   It turns white and the idea fades in as the card reaches the front. */
+.card-window { transition: background-color .4s ease; }
 .card-window > *, .card-strip { transition: opacity .4s ease; }
+.card.is-blank, .card.is-blank .card-window { background: var(--ghost); }
 .card.is-blank .card-window > *, .card.is-blank .card-strip { opacity: 0; }
 .card-window img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; display: block; pointer-events: none; }
 
