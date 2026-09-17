@@ -39,9 +39,8 @@ window.AGORA = {
   ],
 
   /* ── 3. Who's answering ───────────────────────────────────
-     All three are required before the button lights up. Edit the
-     gender choices here; an empty first option keeps it unanswered. */
-  genders: ['Man', 'Woman', 'Non-binary', 'Other'],
+     Age, gender and city are all typed in, and all three have to be
+     filled before the start button lights up.                    */
   ageRange: { min: 10, max: 110 },
 
   /* ── 4. Question 1: gut reaction, shown top to bottom ─────
@@ -62,8 +61,8 @@ window.AGORA = {
     {
       key: 'interesting', label: 'Sounds interesting, would want to learn more', score: 2, color: '#ADF1FF',
       reasons: [
-        { key: 'problem', label: 'Might solve a problem I have' },
-        { key: 'fun',     label: 'Sounds kinda fun' },
+        { key: 'problem', label: 'Could solve a problem I have' },
+        { key: 'fun',     label: 'Sounds like it could be fun' },
         { key: 'easier',  label: 'Could potentially make my life easier' },
         { key: 'social',  label: 'Could maybe improve my social life' }
       ]

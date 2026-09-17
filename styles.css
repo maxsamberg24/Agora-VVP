@@ -158,23 +158,14 @@ button { font-family: inherit; }
 .fields { display: grid; grid-template-columns: 90px 1fr; gap: 18px 22px; max-width: 430px; }
 .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .field-wide { grid-column: 1 / -1; }
-.field input, .field select {
+.field input {
   font: 16px var(--sans); color: var(--ink); background: transparent;
   border: none; border-bottom: 1px solid var(--ink); border-radius: 0;
   padding: 9px 2px; outline: none; transition: border-color .2s;
   -webkit-appearance: none; appearance: none;
 }
-.field select {
-  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
-  background-position: right 9px center, right 4px center;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  padding-right: 22px;
-}
-.field select:invalid, .field select option[value=""] { color: var(--dim); }
-.field input::placeholder { color: var(--dim); }
-.field input:focus, .field select:focus { border-bottom-color: var(--coral); }
-.field input:focus-visible, .field select:focus-visible { outline: none; }
+.field input:focus { border-bottom-color: var(--coral); }
+.field input:focus-visible { outline: none; }
 .field input[type=number]::-webkit-outer-spin-button,
 .field input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .start .pill { margin-top: clamp(16px, 2.2vh, 24px); }

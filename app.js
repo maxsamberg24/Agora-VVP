@@ -263,9 +263,6 @@
   /* ───────────────────────────────────────────────────────────
      5. Build the intro fields, the panel, the deck and the rail
      ─────────────────────────────────────────────────────────── */
-  el.gender.innerHTML = '<option value="" disabled selected>Choose one</option>' +
-    CFG.genders.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('');
-  el.gender.required = true;
   el.age.min = CFG.ageRange.min;
   el.age.max = CFG.ageRange.max;
   el.reasonPrompt.textContent = CFG.reasonPrompt;
@@ -664,7 +661,7 @@
 
   /* ── intro: age, gender and city before the button lights up ── */
   function readProfile() {
-    return { age: el.age.value.trim(), gender: el.gender.value, city: el.city.value.trim() };
+    return { age: el.age.value.trim(), gender: el.gender.value.trim(), city: el.city.value.trim() };
   }
   function profileOk(p) {
     const n = Number(p.age);
@@ -841,8 +838,8 @@
     el.body.classList.add('has-bar');
   }
   el.age.value = S.profile.age || '';
+  el.gender.value = S.profile.gender || '';
   el.city.value = S.profile.city || '';
-  if (S.profile.gender) el.gender.value = S.profile.gender;
   syncStart();
   if (S.startedAt && S.view === 'intro') el.startLabel.textContent = 'Pick up where you left off';
 
