@@ -409,6 +409,9 @@
       card.style.transform =
         `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotateY(${rotY}deg) rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       card.style.opacity = op;
+      // everything behind the front card softens, so the eye stays on the one being judged
+      const back = Math.min(Math.max(d, 0), 4);
+      card.style.filter = back ? `blur(${(back * 1.7).toFixed(1)}px) brightness(${(1 - back * 0.045).toFixed(3)})` : '';
       card.style.zIndex = d < 0 ? 300 : 200 - Math.min(d, 199);
       card.style.visibility = d < -2 || d > 6 ? 'hidden' : '';
       card.classList.toggle('is-active', d === 0);
