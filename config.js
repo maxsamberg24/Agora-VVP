@@ -26,16 +26,12 @@ window.AGORA = {
   images: 'vvps/vvp-{num}.jpg',
 
   vvps: [
-    { num: 1,  label: '' }, { num: 2,  label: '' }, { num: 3,  label: '' },
-    { num: 4,  label: '' }, { num: 5,  label: '' }, { num: 6,  label: '' },
-    { num: 7,  label: '' }, { num: 8,  label: '' }, { num: 9,  label: '' },
-    { num: 10, label: '' }, { num: 11, label: '' }, { num: 12, label: '' },
-    { num: 13, label: '' }, { num: 14, label: '' }, { num: 15, label: '' },
-    { num: 16, label: '' }, { num: 17, label: '' }, { num: 18, label: '' },
-    { num: 19, label: '' }, { num: 20, label: '' }, { num: 21, label: '' },
-    { num: 22, label: '' }, { num: 23, label: '' }, { num: 24, label: '' },
-    { num: 25, label: '' }, { num: 26, label: '' }, { num: 27, label: '' },
-    { num: 28, label: '' }, { num: 29, label: '' }, { num: 30, label: '' }
+    { num: 1, label: '' }, { num: 2, label: '' }, { num: 4, label: '' },
+    { num: 6, label: '' }, { num: 9, label: '' }, { num: 11, label: '' },
+    { num: 12, label: '' }, { num: 13, label: '' }, { num: 14, label: '' },
+    { num: 16, label: '' }, { num: 18, label: '' }, { num: 19, label: '' },
+    { num: 20, label: '' }, { num: 23, label: '' }, { num: 24, label: '' },
+    { num: 27, label: '' }, { num: 29, label: '' }, { num: 30, label: '' }
   ],
 
   /* ── 3. Who's answering ───────────────────────────────────
