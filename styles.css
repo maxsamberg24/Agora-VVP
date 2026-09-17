@@ -128,10 +128,7 @@ button { font-family: inherit; }
   padding: clamp(26px, 3.4vw, 52px) var(--gutter);
 }
 .intro .statement { margin-top: 14px; }
-.intro-statement { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 .22em; }
-.intro-statement span { display: inline; }
-.intro-statement .shout { font-size: clamp(42px, 5.4vw, 82px); }
-.intro-statement .serif { font-size: clamp(40px, 5vw, 76px); }
+.intro-statement .shout { font-size: clamp(44px, 5.6vw, 86px); }
 
 /* a sky arch with the deck peeking in: previews what comes next */
 .intro-window {
