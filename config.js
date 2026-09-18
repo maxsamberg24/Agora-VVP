@@ -31,7 +31,8 @@ window.AGORA = {
     { num: 12, label: '' }, { num: 13, label: '' }, { num: 14, label: '' },
     { num: 16, label: '' }, { num: 18, label: '' }, { num: 19, label: '' },
     { num: 20, label: '' }, { num: 23, label: '' }, { num: 24, label: '' },
-    { num: 27, label: '' }, { num: 29, label: '' }, { num: 30, label: '' }
+    { num: 27, label: '' }, { num: 29, label: '' }, { num: 30, label: '' },
+    { num: 31, label: '' }, { num: 32, label: '' }
   ],
 
   /* ── 3. Who's answering ───────────────────────────────────
